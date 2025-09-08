@@ -7,6 +7,7 @@ import com.api.order.entity.Orders;
 import com.api.order.entity.Product;
 import com.api.order.enums.OrderStatus;
 import com.api.order.exceptions.ApiException;
+import com.api.order.mq.OrderProducer;
 import com.api.order.repository.OrderRepository;
 import com.api.order.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -28,6 +29,8 @@ public class OrderService {
 
     private final OrderRepository ordersRepository;
     private final ProductRepository productRepository;
+    private final OrderProducer orderProducer;
+    private final OrderServiceDetailService orderServiceDetailService;
 
     @Transactional
     public OrderResponse placeOrder(OrderRequest request) {
@@ -69,17 +72,12 @@ public class OrderService {
 
             log.info("Order {} placed successfully with {} items", savedOrder.getId(), products.size());
 
-            // Map back to response
-            return new OrderResponse(
-                    savedOrder.getId(),
-                    savedOrder.getCustomerName(),
-                    products.stream()
-                            .map(pr -> new ProductResponse(pr.getId(), pr.getName(), pr.getQuantity(), pr.getPrice()))
-                            .collect(Collectors.toList()),
-                    savedOrder.getTotalAmount(),
-                    savedOrder.getOrderTime(),
-                    savedOrder.getStatus().name()
-            );
+            orderServiceDetailService.saveOrderStatusLogs(savedOrder,OrderStatus.CREATED,"User","Order created");
+            // Push order to Kafka queue for async processing
+            orderProducer.sendOrder(savedOrder.getId());
+            log.info("Order {} added to processing queue", savedOrder.getId());
+
+            return mapToOrderResponse(savedOrder);
 
         } catch (ApiException ex) {
             log.error("Workflow error while placing order: {}", ex.getMessage(), ex);
