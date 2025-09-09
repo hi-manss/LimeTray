@@ -240,3 +240,82 @@ A scalable backend service for processing food delivery orders using Java, Sprin
 - MySQL is used for persistent storage; queries are optimized for performance.
 - Configuration is managed via `application.properties`.
 
+# LimeTray Backend – Database Schema
+
+This project uses **MySQL** as the database with **Spring Boot JPA/Hibernate** for persistence.  
+The schema is auto-generated from JPA entities if `spring.jpa.hibernate.ddl-auto=create` is enabled.
+
+---
+
+## ⚡ Database Tables
+
+### 1. `orders`
+Stores customer order details.
+
+| Column        | Type                              | Constraints                         |
+|---------------|-----------------------------------|-------------------------------------|
+| `id`          | bigint (PK, AUTO_INCREMENT)       | Primary key, indexed (`idx_orders_id`) |
+| `customer_name` | varchar(255) NOT NULL           | Customer’s name                     |
+| `total_amount`  | decimal(13,2) NOT NULL          | Total bill amount                   |
+| `order_time`    | datetime(6) NOT NULL            | When the order was placed           |
+| `created_at`    | timestamp DEFAULT CURRENT_TIMESTAMP | Auto-filled at creation         |
+| `updated_at`    | timestamp NULL                  | Auto-updated when modified          |
+| `notes`         | varchar(255)                    | Additional notes for the order      |
+| `status`        | enum(`CREATED`, `PROCESSING`, `COMPLETED`) | Current status of the order |
+
+**Indexes**
+- `PRIMARY KEY (id)`
+- `KEY idx_orders_id (id)`
+
+---
+
+### 2. `products`
+Stores product items belonging to an order.
+
+| Column        | Type                              | Constraints                         |
+|---------------|-----------------------------------|-------------------------------------|
+| `id`          | bigint (PK, AUTO_INCREMENT)       | Primary key, indexed (`idx_orders_id`) |
+| `name`        | varchar(255) NOT NULL             | Product name                        |
+| `description` | varchar(255)                      | Product description                 |
+| `price`       | decimal(13,2) NOT NULL            | Product price                       |
+| `quantity`    | int NOT NULL                      | Quantity ordered                    |
+| `order_fk_id` | bigint (FK)                       | References `orders(id)`             |
+
+**Indexes**
+- `PRIMARY KEY (id)`
+- `KEY idx_orders_id (id)`
+- `KEY idx_orders_ids (order_fk_id)`
+
+**Foreign Key**
+- `order_fk_id → orders.id`
+
+---
+
+### 3. `order_status_details`
+Tracks the history of status updates for each order.
+
+| Column        | Type                              | Constraints                         |
+|---------------|-----------------------------------|-------------------------------------|
+| `id`          | bigint (PK, AUTO_INCREMENT)       | Primary key, indexed (`idx_ids`)    |
+| `order_fk_id` | bigint (FK, NOT NULL)             | References `orders(id)`             |
+| `updated_at`  | timestamp NOT NULL                | When the update happened            |
+| `notes`       | text                              | Status update notes                 |
+| `updated_by`  | varchar(255)                      | User/system who updated the status  |
+| `status`      | enum(`CREATED`, `PROCESSING`, `COMPLETED`) | Updated status value |
+
+**Indexes**
+- `PRIMARY KEY (id)`
+- `KEY idx_orders_ids (order_fk_id)`
+- `KEY idx_ids (id)`
+
+**Foreign Key**
+- `order_fk_id → orders.id`
+
+---
+
+## ⚙️ Spring Boot Configuration
+
+To auto-generate tables from JPA entities, set the following property in `application.properties`:
+
+```properties
+spring.jpa.hibernate.ddl-auto=create
