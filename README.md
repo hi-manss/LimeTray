@@ -228,7 +228,7 @@ A scalable backend service for processing food delivery orders using Java, Sprin
 
 ## Asynchronous Order Processing
 
-- When an order is placed, it is published to a Kafka topic (or in-memory queue).
+- When an order is placed, it is published to a Kafka topic.
 - A background consumer listens for new orders and updates their status to 'PROCESSED' after handling.
 - This enables scalable, non-blocking order processing.
 
@@ -240,6 +240,3 @@ A scalable backend service for processing food delivery orders using Java, Sprin
 - MySQL is used for persistent storage; queries are optimized for performance.
 - Configuration is managed via `application.properties`.
 
-## License
-
-MIT
