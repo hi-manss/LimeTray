@@ -21,9 +21,10 @@ public class OrderStatusDetails {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_fk_id", nullable = false)
     @JsonBackReference
     private Orders order;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

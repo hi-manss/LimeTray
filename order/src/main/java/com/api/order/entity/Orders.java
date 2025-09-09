@@ -1,4 +1,5 @@
 package com.api.order.entity;
+
 import com.api.order.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -23,7 +24,7 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String customerName;
 
     @OneToMany
@@ -31,24 +32,24 @@ public class Orders {
     @JsonManagedReference
     private List<Product> items;
 
-    @Column( precision = 13, scale = 2, nullable = false)
+    @Column(precision = 13, scale = 2, nullable = false)
     private BigDecimal totalAmount;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private OffsetDateTime orderTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 20)
     private OrderStatus status;
 
-    @Column( updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
-    @Column( columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "order")
-    @JsonBackReference
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderStatusDetails> orderStatusDetails;
 
     private String notes;

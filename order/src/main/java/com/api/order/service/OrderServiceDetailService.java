@@ -12,21 +12,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
-public class OrderServiceDetailService {
+public interface OrderServiceDetailService {
 
-    private final OrderServiceDetailRepository orderStatusDetailsRepository;
+    public void saveOrderStatusLogs(Orders order, OrderStatus status, String updatedBy, String notes);
 
-    public void saveOrderStatusLogs(Orders order, OrderStatus status, String updatedBy, String notes) {
-        OrderStatusDetails details = OrderStatusDetails.builder()
-                .order(order)
-                .status(status)
-                .updatedBy(updatedBy)
-                .notes(notes)
-                .updatedAt(new Timestamp(System.currentTimeMillis()))
-                .build();
-        orderStatusDetailsRepository.save(details);
-        log.info("Order status log saved: OrderId={}, Status={}", order.getId(), status);
-    }
 }

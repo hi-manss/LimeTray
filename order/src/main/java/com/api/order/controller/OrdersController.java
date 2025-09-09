@@ -2,8 +2,11 @@ package com.api.order.controller;
 
 import com.api.order.dto.req.OrderRequest;
 import com.api.order.dto.res.OrderResponse;
+import com.api.order.entity.Orders;
+import com.api.order.enums.OrderStatus;
 import com.api.order.exceptions.ApiException;
 import com.api.order.service.OrderService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -50,5 +58,15 @@ public class OrdersController {
 
     }
 
+    @PatchMapping(value = "/order")
+    @Transactional
+    public ResponseEntity<?> updateOrder(@RequestParam Map<String, String> params) {
+        if (params.isEmpty()) {
+            throw new ApiException("No parameters provided for update", "NO_UPDATE_PARAMS");
+        }
+        orderService.updateOrder(params);
+
+        return ResponseEntity.ok("Order updated successfully");
+    }
 
 }
