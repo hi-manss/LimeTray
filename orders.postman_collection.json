@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "17454c1c-3d6f-4a8b-8d05-7ec5dba7adcd",
+		"name": "orders",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26667719",
+		"_collection_link": "https://ttt999-5142.postman.co/workspace/limetray~2682ae91-2776-4421-84fd-ba7069e993a1/collection/26667719-17454c1c-3d6f-4a8b-8d05-7ec5dba7adcd?action=share&source=collection_link&creator=26667719"
+	},
+	"item": [
+		{
+			"name": "orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/api/v1/orders?page=3&size=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "3"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/order/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"order",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerName\": \"Himanshu Chauhan\",\r\n    \"items\": [\r\n        {\r\n            \"name\": \"Margherita Pizza\",\r\n            \"quantity\": 1,\r\n            \"price\": 450.00\r\n        },\r\n        {\r\n            \"name\": \"Cold Coffee\",\r\n            \"quantity\": 2,\r\n            \"price\": 120.00\r\n        }\r\n    ],\r\n    \"totalAmount\": 690.00,\r\n    \"orderTime\": \"2025-09-08T18:30:00Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/v1/order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"order"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
