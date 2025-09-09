@@ -2,6 +2,7 @@ package com.api.order.controller;
 
 import com.api.order.dto.req.OrderRequest;
 import com.api.order.dto.res.OrderResponse;
+import com.api.order.entity.Orders;
 import com.api.order.exceptions.ApiException;
 import com.api.order.service.OrderService;
 import jakarta.transaction.Transactional;
@@ -13,10 +14,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/v1")
+@RequestMapping(value = "/api")
 @Slf4j
 public class OrdersController {
 
@@ -61,4 +64,13 @@ public class OrdersController {
         return ResponseEntity.ok("Order updated successfully");
     }
 
+    @GetMapping(value = "/order/{id}/status" )
+    public ResponseEntity<?> getOrderStatus(@PathVariable("id") Long id) {
+
+        Orders status = orderService.getOrderById(id);
+        Map<String , String> response = new HashMap<>();
+        response.put("orderId", status.getId().toString());
+        response.put("status", status.getStatus().toString());
+        return ResponseEntity.ok(response);
+}
 }

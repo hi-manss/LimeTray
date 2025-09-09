@@ -159,10 +159,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ApiException("No update fields provided other than ID", "NO_UPDATE_FIELDS");
         }
 
-        Orders existingOrder = findByIdEntity(id);
-        if (existingOrder == null) {
-            throw new ApiException("Order not found with ID: " + id, "ORDER_NOT_FOUND");
-        }
+        Orders existingOrder = getOrderById(id);
 
         boolean updated = false;
         OrderStatus oldStatus = existingOrder.getStatus();

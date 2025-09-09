@@ -14,6 +14,5 @@ public interface OrderService {
     public OrderResponse placeOrder(OrderRequest request);
     public Orders getOrderById(Long id);
     Page<OrderResponse> getAllOrders(Pageable pageable);
-    Orders findByIdEntity(Long id);
     void updateOrder(Map<String,String> param);
 }
