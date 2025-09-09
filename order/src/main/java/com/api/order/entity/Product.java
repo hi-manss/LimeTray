@@ -3,7 +3,6 @@ package com.api.order.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.kafka.common.protocol.types.Field;
 
 import java.math.BigDecimal;
 
