@@ -39,34 +39,46 @@ A scalable backend service for processing food delivery orders using Java, Sprin
 **Request Body**
 ```json
 {
-  "customerName": "John Doe",
-  "items": [
-    {
-      "productId": 1,
-      "quantity": 2
-    }
-  ],
-  "totalAmount": 99.99,
-  "orderTime": "2024-06-10T12:00:00Z"
+    "customerName": "Himanshu Chauhan",
+    "items": [
+        {
+            "name": "Margherita Pizza",
+            "quantity": 1,
+            "price": 450.00
+        },
+        {
+            "name": "Cold Coffee",
+            "quantity": 2,
+            "price": 120.00
+        }
+    ],
+    "totalAmount": 690.00,
+    "orderTime": "2025-09-08T18:30:00Z"
 }
 ```
 
 **Response**
 ```json
 {
-  "orderId": 123,
-  "customerName": "John Doe",
-  "items": [
-    {
-      "productId": 1,
-      "productName": "Pizza",
-      "quantity": 2,
-      "price": 49.99
-    }
-  ],
-  "totalAmount": 99.99,
-  "orderStatus": "PENDING",
-  "orderTime": "2024-06-10T12:00:00Z"
+    "id": 2,
+    "customerName": "Himanshu Chauhan",
+    "items": [
+        {
+            "id": 3,
+            "name": "Margherita Pizza",
+            "qty": 1,
+            "price": 450.00
+        },
+        {
+            "id": 4,
+            "name": "Cold Coffee",
+            "qty": 2,
+            "price": 120.00
+        }
+    ],
+    "totalAmount": 690.00,
+    "orderTime": "2025-09-08T18:30:00Z",
+    "status": "CREATED"
 }
 ```
 
@@ -128,6 +140,56 @@ A scalable backend service for processing food delivery orders using Java, Sprin
 }
 ```
 
+###  Fetch  Orders (with with id)
+
+**GET** `/api/order/2`
+
+**Response**
+```json
+{
+    "id": 2,
+    "customerName": "Dd",
+    "items": [
+        {
+            "id": 3,
+            "name": "Margherita Pizza",
+            "description": null,
+            "quantity": 1,
+            "price": 450.00
+        },
+        {
+            "id": 4,
+            "name": "Cold Coffee",
+            "description": null,
+            "quantity": 2,
+            "price": 120.00
+        }
+    ],
+    "totalAmount": 690.00,
+    "orderTime": "2025-09-08T18:30:00Z",
+    "status": "PROCESSING",
+    "createdAt": "2025-09-09T05:33:54.000+00:00",
+    "updatedAt": "2025-09-09T05:34:59.000+00:00",
+    "orderStatusDetails": [
+        {
+            "id": 3,
+            "status": "CREATED",
+            "updatedBy": "User",
+            "updatedAt": "2025-09-09T05:33:54.000+00:00",
+            "notes": "Order created"
+        },
+        {
+            "id": 4,
+            "status": "PROCESSING",
+            "updatedBy": "System",
+            "updatedAt": "2025-09-09T05:33:59.000+00:00",
+            "notes": "Order is being processed"
+        }
+    ],
+    "notes": "Order is being processed"
+}
+```
+
 ### 3. Fetch Order Status
 
 **GET** `/api/orders/{orderId}/status`
@@ -142,20 +204,13 @@ A scalable backend service for processing food delivery orders using Java, Sprin
 
 ### 4. Manually Update Order Status
 
-**PATCH** `/api/orders/{orderId}/status`
+**PATCH** `api/order?id=2&customerName=test&status=COMPLETED)`
 
-**Request Body**
-```json
-{
-  "orderStatus": "PROCESSED"
-}
-```
 
 **Response**
 ```json
 {
-  "orderId": 123,
-  "orderStatus": "PROCESSED"
+  Order updated successfully
 }
 ```
 
